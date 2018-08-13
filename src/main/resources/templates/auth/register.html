@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Blog | Login</title>
+        <!-- Fonts -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css" integrity="sha384-XdYbMnZ/QjLh6iI4ogqCTaIjrFk87ip+ekIjefZch0Y+PvJ8CDYtEs1ipDmPorQ+" crossorigin="anonymous" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700">
+        <!-- Styles -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome-animation/0.0.10/font-awesome-animation.css" type="text/css" />
+        <link rel="stylesheet" type="text/css" th:href="@{css/style.css}"/>
+         <style>
+            body {
+            font-family: 'Lato';
+            }
+            .fa-btn {
+            margin-right: 6px;
+            }
+        </style>
+    </head>
+    <body id="app-layout">
+    	<div th:replace="layout/nav :: navbar"></div>
+    	      
+		<div class="container">
+		    <div class="row">
+		        <div class="col-md-8 col-md-offset-2">
+		            <div class="panel panel-default">
+		                <div class="panel-heading">Register</div>
+		                <div class="panel-body">
+		                
+							<form th:action="@{register}" th:object="${user}" method="POST" class="form-horizontal" role="form">
+								<div class="form-group" th:classappend="${#fields.hasErrors('fullname')} ? has-error">
+									<label class="col-md-4 control-label">Full Name</label>
+		                            <div class="col-md-6">
+										<input th:field="*{fullname}" type="text" class="form-control" placeholder="Full Name" name="fullname"/>
+										<span class="help-block"> <strong th:if="${#fields.hasErrors('fullname')}" th:errors="*{fullname}"></strong>
+										</span>
+		                            </div>
+		                            
+								</div>
+			
+								<div class="form-group" th:classappend="${#fields.hasErrors('email')} ? has-error">
+									<label class="col-md-4 control-label">Email</label>
+									<div class="col-md-6">
+										<input th:field="*{email}"  type="email" class="form-control" placeholder="Email" name="email" />
+										<span class="help-block"> <strong th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></strong>
+										</span>
+									</div>
+								</div>
+								
+								
+								<div class="form-group" th:classappend="${#fields.hasErrors('password')} ? has-error">
+									<label class="col-md-4 control-label">Password</label>
+									<div class="col-md-6">
+										<input th:field="*{password}" type="password" class="form-control" placeholder="Password" name="password"/>
+										<span class="help-block"> <strong th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></strong>
+										</span>
+									</div>
+								</div>
+								
+								<div class="form-group" th:classappend="${#fields.hasErrors('confirmedPassword')} ? has-error">
+									<label class="col-md-4 control-label">Confirm Password</label>
+									<div class="col-md-6">
+										<input th:field="*{confirmedPassword}" type="password" class="form-control" placeholder="Confirm Password" name="confirmedPassword"/>
+										<span class="help-block"> <strong th:if="${#fields.hasErrors('confirmedPassword')}" th:errors="*{confirmedPassword}"></strong>
+										</span>
+									</div>
+								</div>
+								
+		                        <div class="form-group">
+		                            <div class="col-md-6 col-md-offset-4">
+		                                <button type="submit" class="btn btn-primary" name="submit">
+		                                	<i class="fa fa-btn fa-user"></i> Register
+		                                </button>
+		                            </div>
+		                        </div>
+							</form>
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+		
+		<div th:replace="layout/footer :: footer"></div>
+	
+        <!-- JavaScripts -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js" integrity="sha384-I6F5OKECLVtK/BL+8iSLDEHowSAfUo76ZL9+kGAgTRdiByINKJaqTPH/QVNS1VDb" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+        <script th:src="@{js/scroll.js}">"></script>
+        
+    </body>
+</html>
