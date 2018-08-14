@@ -37,9 +37,15 @@ public class HomeController {
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public ModelAndView createNewUser(@Valid User user, BindingResult bindingResult) {
 		ModelAndView modelAndView = new ModelAndView();
-		User userExists = userService.findUserByEmail(user.getEmail());
-		if (userExists != null) {
-			bindingResult.rejectValue("email", "error.user",
+		User usernameExists = userService.findUserByUsername(user.getUsername());
+		User emailExists = userService.findUserByEmail(user.getEmail());
+		if (usernameExists != null) {
+			bindingResult.rejectValue("username", "error.user",
+					"There is already a user registered with the username provided");
+		}
+
+		if (emailExists != null) {
+			bindingResult.rejectValue("email", "error.user2",
 					"There is already a user registered with the email provided");
 		}
 

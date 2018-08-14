@@ -32,9 +32,9 @@ public class User {
 	@Column(name = "userId")
 	private int userId;
 
-	@Column(name = "fullname")
-	@NotEmpty(message = "*Please provide your full name")
-	private String fullname;
+	@Column(name = "username")
+	@NotEmpty(message = "*Please provide your username")
+	private String username;
 
 	@Column(name = "password")
 	@Length(min = 5, message = "*Your password must have at least 5 characters")
@@ -49,6 +49,10 @@ public class User {
 	@Email(message = "*Please provide a valid Email")
 	@NotEmpty(message = "*Please provide an email")
 	private String email;
+
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = "M_User_Role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private Set<Role> roles;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "createdDateTime")
@@ -116,12 +120,12 @@ public class User {
 		return output;
 	}
 
-	public String getFullname() {
-		return fullname;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setFullname(String fullname) {
-		this.fullname = fullname;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getConfirmedPassword() {
@@ -131,4 +135,14 @@ public class User {
 	public void setConfirmedPassword(String confirmedPassword) {
 		this.confirmedPassword = confirmedPassword;
 	}
+
+	public Set<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
+	}
+	
+	
 }

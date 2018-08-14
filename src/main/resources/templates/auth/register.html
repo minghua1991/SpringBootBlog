@@ -32,11 +32,11 @@
 		                <div class="panel-body">
 		                
 							<form th:action="@{register}" th:object="${user}" method="POST" class="form-horizontal" role="form">
-								<div class="form-group" th:classappend="${#fields.hasErrors('fullname')} ? has-error">
-									<label class="col-md-4 control-label">Full Name</label>
+								<div class="form-group" th:classappend="${#fields.hasErrors('username')} ? has-error">
+									<label class="col-md-4 control-label">Username</label>
 		                            <div class="col-md-6">
-										<input th:field="*{fullname}" type="text" class="form-control" placeholder="Full Name" name="fullname"/>
-										<span class="help-block"> <strong th:if="${#fields.hasErrors('fullname')}" th:errors="*{fullname}"></strong>
+										<input th:field="*{username}" type="text" class="form-control" placeholder="Username" name="username"/>
+										<span class="help-block"> <strong th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></strong>
 										</span>
 		                            </div>
 		                            
