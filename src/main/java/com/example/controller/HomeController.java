@@ -3,24 +3,32 @@ package com.example.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.model.User;
 import com.example.service.UserService;
 
-@Controller
+@RestController
 public class HomeController {
 	@Autowired
 	private UserService userService;
 
 	@RequestMapping(value = { "/", "/login" }, method = RequestMethod.GET)
-	public ModelAndView login(Model model) {
+	public ModelAndView login2(Model model) {
 		ModelAndView modelAndView = new ModelAndView("auth/login");
+		User user = new User();
+		modelAndView.addObject(user);
+		return modelAndView;
+	}
+
+	@RequestMapping(value = { "/", "/login" }, method = RequestMethod.POST)
+	public ModelAndView login(Model model) {
+		ModelAndView modelAndView = new ModelAndView("auth/dashboard");
 		User user = new User();
 		modelAndView.addObject(user);
 		return modelAndView;
@@ -69,5 +77,10 @@ public class HomeController {
 	public ModelAndView dashboard() {
 		ModelAndView modelAndView = new ModelAndView("auth/dashboard");
 		return modelAndView;
+	}
+	
+	@RequestMapping(value = "/test")
+	public String test() {
+		return "hello test";
 	}
 }
