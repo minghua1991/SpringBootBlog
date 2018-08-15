@@ -3,6 +3,8 @@ package com.example.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -68,7 +70,6 @@ public class HomeController {
 			modelAndView.addObject("successMessage", "User has been registered successfully");
 			modelAndView.addObject("user", new User());
 			modelAndView.setViewName("auth/register");
-
 		}
 		return modelAndView;
 	}
@@ -76,9 +77,12 @@ public class HomeController {
 	@RequestMapping(value = "/dashboard")
 	public ModelAndView dashboard() {
 		ModelAndView modelAndView = new ModelAndView("auth/dashboard");
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = userService.findUserByUsername(auth.getName());
+		modelAndView.addObject("username", user.getUsername());
 		return modelAndView;
 	}
-	
+
 	@RequestMapping(value = "/test")
 	public String test() {
 		return "hello test";
