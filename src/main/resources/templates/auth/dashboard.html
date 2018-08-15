@@ -29,7 +29,13 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">Welcome</div>
                         <div class="panel-body">
+							
+							<div class="alert alert-danger text-center" th:if="${param.error}">
+							    <strong>Oops, you sure you are doing the right thing?</strong>
+							</div>
+		                   
                             Welcome <span th:utext="${username}"></span>. Your Application's Landing Page.
+			                   
                             <hr>
                             <div class="pull-left">
                                 <h5>Post Dashboard</h5>

@@ -9,12 +9,14 @@ public interface PostService {
 	List<Post> listAll();
 
 	List<Post> listByUser(User user);
-	
-	Post getById(Long id);
+
+	Post getById(int postId);
 
 	void save(Post post);
-	
+
 	void update(Post post);
 
-	void delete(Long id);
+	void delete(int id);
+
+	boolean isOwner(Post post, User user);
 }

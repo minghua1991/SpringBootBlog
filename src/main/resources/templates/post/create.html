@@ -50,7 +50,7 @@
 		                
 		                <div class="form-group" th:classappend="${#fields.hasErrors('content')} ? has-error">
 		                    <label>Content:</label>
-		                    <textarea th:field="*{content}" type="text" class="form-control" name="content" style = "height: 500px; resize: vertical"></textarea>
+		                    <textarea th:field="*{content}" type="text" class="form-control" name="content" style = "height: 350px; resize: vertical"></textarea>
 		                     <span class="help-block"> <strong th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></strong>
                              </span>
 		                </div>

@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,7 +35,7 @@ public class PostController {
 		User loggedInUser = userService.findUserByUsername(auth.getName());
 
 		if (loggedInUser == null) {
-			modelAndView = new ModelAndView("redirect:/login");
+			modelAndView = new ModelAndView("redirect:/login?error=true");
 		} else {
 			modelAndView = new ModelAndView("post/create");
 			Post post = new Post();
@@ -53,19 +54,66 @@ public class PostController {
 		User loggedInUser = userService.findUserByUsername(auth.getName());
 
 		if (loggedInUser == null) {
-			modelAndView = new ModelAndView("redirect:/login");
+			modelAndView = new ModelAndView("redirect:/login?error=true");
 			return modelAndView;
 		}
-		
+
 		if (bindingResult.hasErrors()) {
 			modelAndView = new ModelAndView("post/create");
 			return modelAndView;
 		}
-		
-		
+
 		post.setUser(loggedInUser);
 		postService.save(post);
-		
+
+		modelAndView = new ModelAndView("redirect:/dashboard");
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "/post/show/{postId}", method = RequestMethod.GET)
+	public ModelAndView handlePostShowHandler(@PathVariable int postId, Model model) {
+		ModelAndView modelAndView = new ModelAndView("post/show");
+
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User loggedInUser = userService.findUserByUsername(auth.getName());
+
+		if (loggedInUser != null) {
+			modelAndView.addObject("username", loggedInUser.getUsername());
+		}
+
+		modelAndView.addObject("post", postService.getById(postId));
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "/post/delete/{postId}", method = RequestMethod.GET)
+	public ModelAndView handlePostDeletionHandler(@PathVariable int postId, Model model) {
+		ModelAndView modelAndView = null;
+
+		// Check if the user is logged in
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User loggedInUser = userService.findUserByUsername(auth.getName());
+
+		if (loggedInUser == null) {
+			modelAndView = new ModelAndView("redirect:/login?error=true");
+			return modelAndView;
+		}
+
+		boolean isOwner = false;
+		Post post = postService.getById(postId);
+
+		if (loggedInUser != null && post != null) {
+			isOwner = postService.isOwner(post, loggedInUser);
+		}
+
+		if (loggedInUser == null || post == null || !isOwner) {
+			modelAndView = new ModelAndView("redirect:/dashboard?error=true");
+			return modelAndView;
+		}
+
+		if (isOwner) {
+			postService.delete(postId);
+		}
+
 		modelAndView = new ModelAndView("redirect:/dashboard");
 		return modelAndView;
 	}

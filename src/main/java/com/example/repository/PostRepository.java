@@ -9,13 +9,13 @@ import com.example.model.Post;
 import com.example.model.User;
 
 @Repository("postRepository")
-public interface PostRepository extends JpaRepository<Post, Long> {
+public interface PostRepository extends JpaRepository<Post, Integer> {
 
 //	 List<Post> findByUserId(String id);
 //
 //	 List<Post> findByUsername(String username);
 	 
-	 Post findByPostId(long id);
+	 Post findByPostId(int id);
 	 
 	 List<Post> findByUser(User user);
 }

@@ -30,7 +30,7 @@ public class PostServiceImp implements PostService {
 	}
 
 	@Override
-	public Post getById(Long id) {
+	public Post getById(int id) {
 		return postRepository.findByPostId(id);
 	}
 
@@ -41,7 +41,7 @@ public class PostServiceImp implements PostService {
 	}
 
 	@Override
-	public void delete(Long id) {
+	public void delete(int id) {
 		postRepository.deleteById(id);
 	}
 
@@ -54,6 +54,11 @@ public class PostServiceImp implements PostService {
 	@Override
 	public List<Post> listByUser(User user) {
 		return postRepository.findByUser(user);
+	}
+
+	@Override
+	public boolean isOwner(Post post, User user) {
+		return post.getUser() == user;
 	}
 
 }
