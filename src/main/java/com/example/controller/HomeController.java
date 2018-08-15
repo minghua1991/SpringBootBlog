@@ -79,7 +79,11 @@ public class HomeController {
 		ModelAndView modelAndView = new ModelAndView("auth/dashboard");
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userService.findUserByUsername(auth.getName());
-		modelAndView.addObject("username", user.getUsername());
+		String loggedUsername = null;
+		if(user != null) {
+			loggedUsername = user.getUsername();
+		}
+		modelAndView.addObject("username", loggedUsername);
 		return modelAndView;
 	}
 
