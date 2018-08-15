@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Blog | Login</title>
+        <title>Create a new post</title>
         <!-- Fonts -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css" integrity="sha384-XdYbMnZ/QjLh6iI4ogqCTaIjrFk87ip+ekIjefZch0Y+PvJ8CDYtEs1ipDmPorQ+" crossorigin="anonymous" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700">
@@ -23,47 +23,41 @@
     </head>
     <body id="app-layout">
     	<div th:replace="layout/nav :: navbar"></div>
-
+	
 		<div class="container">
-			<div class="row">
-				<div class="col-md-8 col-md-offset-2">
-					<div class="panel panel-default">
-						<div class="panel-heading">Login</div>
-						<div class="panel-body">
-	
-							<div class="alert alert-danger text-center" th:if="${param.error}">
-							    <strong>Username or Password invalid, please verify</strong>
-							</div>
-
-							<form class="form-horizontal" role="form" th:action="@{login}" method="post">
-								<div class="form-group">
-									<label class="col-md-4 control-label">Username</label>
-	
-									<div class="col-md-6">
-										<input type="text" class="form-control" name="username" th:placeholder="Username"/>
-									</div>
-								</div>
-	
-								<div class="form-group">
-									<label for="password" class="col-md-4 control-label">Password</label>
-	
-									<div class="col-md-6">
-										<input type="password" class="form-control" name="password" th:placeholder="Password"/>
-									</div>
-								</div>
-	
-								<div class="form-group">
-									<div class="col-md-6 col-md-offset-4">
-										<button type="submit" class="btn btn-primary">
-											<i class="fa fa-btn fa-sign-in"></i> Login
-										</button>
-									</div>
-								</div>
-							</form> 
-						</div>
-					</div>
-				</div>
-			</div>
+		    <div class="row">
+		        <div class="col-lg-12 margin-tb">
+		            <div class="pull-left">
+		                <h2> Start a new post</h2>
+		            </div>
+		            <div class="pull-right">
+		                <a class="btn btn-primary" th:href="@{/dashboard}">
+		                Back
+		                </a>
+		            </div>
+		        </div>
+		    </div>
+		    
+		    <div class="row">
+		        <div class="col-lg-12">
+		            <form th:action="@{/post/create}" th:object="${post}" method="POST">
+		                <div class="form-group" th:classappend="${#fields.hasErrors('subject')} ? has-error">
+		                    <label>Subject:</label>
+		                    <input th:field="*{subject}" type="text" class="form-control" name="subject" />
+		                     <span class="help-block"> <strong th:if="${#fields.hasErrors('subject')}" th:errors="*{subject}"></strong>
+                             </span>
+		                </div>
+		                
+		                <div class="form-group" th:classappend="${#fields.hasErrors('content')} ? has-error">
+		                    <label>Content:</label>
+		                    <textarea th:field="*{content}" type="text" class="form-control" name="content" style = "height: 500px; resize: vertical"></textarea>
+		                     <span class="help-block"> <strong th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></strong>
+                             </span>
+		                </div>
+		                <button type="submit" class="btn btn-primary">Submit</button>
+		            </form>
+		        </div>
+		    </div>
 		</div>
 
    		<div th:replace="layout/footer :: footer"></div>

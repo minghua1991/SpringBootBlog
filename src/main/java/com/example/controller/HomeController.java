@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.model.User;
+import com.example.repository.PostRepository;
+import com.example.service.PostService;
 import com.example.service.UserService;
 
 @RestController
@@ -22,18 +24,21 @@ public class HomeController {
 	@Autowired
 	private UserService userService;
 
+	@Autowired
+	private PostService postService;
+
 	@RequestMapping(value = { "/", "/login" }, method = RequestMethod.GET)
-	public ModelAndView login2(Model model) {
+	public ModelAndView login(Model model) {
 		ModelAndView modelAndView = null;
-		
+
 		// Check if the user is logged in
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User loggedInUser = userService.findUserByUsername(auth.getName());
-		if(loggedInUser != null) {
+		if (loggedInUser != null) {
 			modelAndView = new ModelAndView("redirect:/dashboard");
 			return modelAndView;
 		}
-		
+
 		modelAndView = new ModelAndView("auth/login");
 		User user = new User();
 		modelAndView.addObject(user);
@@ -43,15 +48,15 @@ public class HomeController {
 	@RequestMapping(value = "/register")
 	public ModelAndView register() {
 		ModelAndView modelAndView = null;
-		
+
 		// Check if the user is logged in
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User loggedInUser = userService.findUserByUsername(auth.getName());
-		if(loggedInUser != null) {
+		if (loggedInUser != null) {
 			modelAndView = new ModelAndView("redirect:/dashboard");
 			return modelAndView;
 		}
-		
+
 		modelAndView = new ModelAndView("auth/register");
 		User user = new User();
 		modelAndView.addObject(user);
@@ -61,6 +66,7 @@ public class HomeController {
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public ModelAndView createNewUser(@Valid User user, BindingResult bindingResult) {
 		ModelAndView modelAndView = null;
+
 		User usernameExists = userService.findUserByUsername(user.getUsername());
 		User emailExists = userService.findUserByEmail(user.getEmail());
 		if (usernameExists != null) {
@@ -74,11 +80,11 @@ public class HomeController {
 		}
 
 		if (!user.getPassword().equals(user.getConfirmedPassword())) {
-			bindingResult.rejectValue("confirmedPassword", "error.password", "Please confirm your password");
+			bindingResult.rejectValue("confirmedPassword", "error.password", "*Please match your password");
 		}
 
 		if (bindingResult.hasErrors()) {
-			modelAndView= new ModelAndView("auth/register");
+			modelAndView = new ModelAndView("auth/register");
 		} else {
 			userService.saveUser(user);
 			modelAndView = new ModelAndView("redirect:/login");
@@ -88,14 +94,21 @@ public class HomeController {
 
 	@RequestMapping(value = "/dashboard")
 	public ModelAndView dashboard() {
-		ModelAndView modelAndView = new ModelAndView("auth/dashboard");
+		ModelAndView modelAndView = null;
+
+		// Check if the user is logged in
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User loggedInUser = userService.findUserByUsername(auth.getName());
-		String loggedInUsername = null;
-		if(loggedInUser != null) {
-			loggedInUsername = loggedInUser.getUsername();
+
+		if (loggedInUser == null) {
+			modelAndView = new ModelAndView("redirect:/login");
+		} else {
+			modelAndView = new ModelAndView("auth/dashboard");
+			modelAndView.addObject("username", loggedInUser.getUsername());
+
+			modelAndView.addObject("posts", postService.listByUser(loggedInUser));
+//			System.out.println(postService.listByUser(loggedInUser).get(0).getSubject());
 		}
-		modelAndView.addObject("username", loggedInUsername);
 		return modelAndView;
 	}
 

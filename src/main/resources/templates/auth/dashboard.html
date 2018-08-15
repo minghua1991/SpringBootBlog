@@ -4,14 +4,14 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Blog | Login</title>
+        <title>Blog | Dashboard</title>
         <!-- Fonts -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css" integrity="sha384-XdYbMnZ/QjLh6iI4ogqCTaIjrFk87ip+ekIjefZch0Y+PvJ8CDYtEs1ipDmPorQ+" crossorigin="anonymous" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700">
         <!-- Styles -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome-animation/0.0.10/font-awesome-animation.css" type="text/css" />
-        <link rel="stylesheet" type="text/css" th:href="@{css/style.css}"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
         <style>
             body {
             font-family: 'Lato';
@@ -25,11 +25,40 @@
         <div th:replace="layout/nav :: navbar"></div>
         <div class="container">
             <div class="row">
-                <div class="col-md-8 col-md-offset-2">
+                <div class="col-md-10 col-md-offset-1">
                     <div class="panel panel-default">
-                        <div class="panel-heading">Login</div>
+                        <div class="panel-heading">Welcome</div>
                         <div class="panel-body">
-                            <h2><span th:utext="${username}"></span></h2>
+                            Welcome <span th:utext="${username}"></span>. Your Application's Landing Page.
+                            <hr>
+                            <div class="pull-left">
+                                <h5>Post Dashboard</h5>
+                            </div>
+                            <div class="pull-right">
+                                <a class="btn btn-success" th:href="@{/post/create}">Create A New Post</a>
+                            </div>
+                            <table class="table table-bordered table-responsive" id="dashboard-table">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Subject</th>
+                                    <th>Poster</th>
+                                    <th>Post Time</th>
+                                    <th width="280px">Action</th>
+                                </tr>
+                                <th:block th:each="post : ${posts}">
+                                    <tr>
+                                        <td th:text="${post.getPostId()}"></td>
+                                        <td th:text="${post.getSubject()}"></td>
+                                        <td th:text="${post.getUser().getUsername()}"></td>
+                                        <td th:text="${post.getCreatedDateTimeInStringFormate()}"></td>
+                                        <td>
+                                            <a class="btn btn-info" th:href="@{${'/post/show/' + post.getPostId()}}">Show</a>
+                                            <a class="btn btn-primary" th:href="@{${'/post/edit/' + post.getPostId()}}">Edit</a>
+                                            <a class="btn btn-danger" th:href="@{${'/post/delete/' + post.getPostId()}}" onclick="return confirm('Are you sure?')">Delete</a>
+                                        </td>
+                                    </tr>
+                                </th:block>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -39,6 +68,6 @@
         <!-- JavaScripts -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js" integrity="sha384-I6F5OKECLVtK/BL+8iSLDEHowSAfUo76ZL9+kGAgTRdiByINKJaqTPH/QVNS1VDb" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-        <script th:src="@{js/scroll.js}">"></script>
+        <script th:src="@{/js/scroll.js}">"></script>
     </body>
 </html>
