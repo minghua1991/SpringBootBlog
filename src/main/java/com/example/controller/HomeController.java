@@ -60,7 +60,7 @@ public class HomeController {
 
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public ModelAndView createNewUser(@Valid User user, BindingResult bindingResult) {
-		ModelAndView modelAndView = new ModelAndView();
+		ModelAndView modelAndView = null;
 		User usernameExists = userService.findUserByUsername(user.getUsername());
 		User emailExists = userService.findUserByEmail(user.getEmail());
 		if (usernameExists != null) {
@@ -78,12 +78,10 @@ public class HomeController {
 		}
 
 		if (bindingResult.hasErrors()) {
-			modelAndView.setViewName("auth/register");
+			modelAndView= new ModelAndView("auth/register");
 		} else {
 			userService.saveUser(user);
-			modelAndView.addObject("successMessage", "User has been registered successfully");
-			modelAndView.addObject("user", new User());
-			modelAndView.setViewName("auth/register");
+			modelAndView = new ModelAndView("redirect:/login");
 		}
 		return modelAndView;
 	}
