@@ -3,8 +3,10 @@ package com.example.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,15 +24,17 @@ public class HomeController {
 
 	@RequestMapping(value = { "/", "/login" }, method = RequestMethod.GET)
 	public ModelAndView login2(Model model) {
-		ModelAndView modelAndView = new ModelAndView("auth/login");
-		User user = new User();
-		modelAndView.addObject(user);
-		return modelAndView;
-	}
-
-	@RequestMapping(value = { "/", "/login" }, method = RequestMethod.POST)
-	public ModelAndView login(Model model) {
-		ModelAndView modelAndView = new ModelAndView("auth/dashboard");
+		ModelAndView modelAndView = null;
+		
+		// Check if the user is logged in
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User loggedInUser = userService.findUserByUsername(auth.getName());
+		if(loggedInUser != null) {
+			modelAndView = new ModelAndView("redirect:/dashboard");
+			return modelAndView;
+		}
+		
+		modelAndView = new ModelAndView("auth/login");
 		User user = new User();
 		modelAndView.addObject(user);
 		return modelAndView;
@@ -38,7 +42,17 @@ public class HomeController {
 
 	@RequestMapping(value = "/register")
 	public ModelAndView register() {
-		ModelAndView modelAndView = new ModelAndView("auth/register");
+		ModelAndView modelAndView = null;
+		
+		// Check if the user is logged in
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User loggedInUser = userService.findUserByUsername(auth.getName());
+		if(loggedInUser != null) {
+			modelAndView = new ModelAndView("redirect:/dashboard");
+			return modelAndView;
+		}
+		
+		modelAndView = new ModelAndView("auth/register");
 		User user = new User();
 		modelAndView.addObject(user);
 		return modelAndView;
@@ -78,12 +92,12 @@ public class HomeController {
 	public ModelAndView dashboard() {
 		ModelAndView modelAndView = new ModelAndView("auth/dashboard");
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User user = userService.findUserByUsername(auth.getName());
-		String loggedUsername = null;
-		if(user != null) {
-			loggedUsername = user.getUsername();
+		User loggedInUser = userService.findUserByUsername(auth.getName());
+		String loggedInUsername = null;
+		if(loggedInUser != null) {
+			loggedInUsername = loggedInUser.getUsername();
 		}
-		modelAndView.addObject("username", loggedUsername);
+		modelAndView.addObject("username", loggedInUsername);
 		return modelAndView;
 	}
 
