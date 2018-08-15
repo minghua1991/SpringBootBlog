@@ -117,4 +117,80 @@ public class PostController {
 		modelAndView = new ModelAndView("redirect:/dashboard");
 		return modelAndView;
 	}
+
+	@RequestMapping(value = "/post/edit/{postId}", method = RequestMethod.GET)
+	public ModelAndView handlePostEditionHandler(@PathVariable int postId, Model model) {
+		ModelAndView modelAndView = null;
+
+		// Check if the user is logged in
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User loggedInUser = userService.findUserByUsername(auth.getName());
+
+		if (loggedInUser == null) {
+			modelAndView = new ModelAndView("redirect:/login?error=true");
+			return modelAndView;
+		}
+
+		boolean isOwner = false;
+		Post post = postService.getById(postId);
+
+		if (loggedInUser != null && post != null) {
+			isOwner = postService.isOwner(post, loggedInUser);
+		}
+
+		if (loggedInUser == null || post == null || !isOwner) {
+			modelAndView = new ModelAndView("redirect:/dashboard?error=true");
+			return modelAndView;
+		}
+
+		if (isOwner) {
+			modelAndView = new ModelAndView("post/edit");
+			modelAndView.addObject("post", post);
+			System.out.println("test user " + post.getUser());
+			modelAndView.addObject("username", loggedInUser.getUsername());
+		}
+
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "/post/edit/{postId}", method = RequestMethod.POST)
+	public ModelAndView submitPostEditionHandler(@Valid Post postFromForm, BindingResult bindingResult, @PathVariable int postId, Model model) {
+		ModelAndView modelAndView = null;
+
+		// Check if the user is logged in
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User loggedInUser = userService.findUserByUsername(auth.getName());
+
+		if (loggedInUser == null) {
+			modelAndView = new ModelAndView("redirect:/login?error=true");
+			return modelAndView;
+		}
+
+		boolean isOwner = false;
+		Post post = postService.getById(postId);
+
+		if (loggedInUser != null && post != null) {
+			isOwner = postService.isOwner(post, loggedInUser);
+		}
+
+		if (loggedInUser == null || post == null || !isOwner || postFromForm.getPostId() != postId) {
+			modelAndView = new ModelAndView("redirect:/dashboard?error=true");
+			return modelAndView;
+		}
+		
+		postFromForm.setUser(loggedInUser);
+		postFromForm.setCreatedDateTime(post.getCreatedDateTime());
+
+		if (bindingResult.hasErrors()) {
+			modelAndView = new ModelAndView("post/edit");
+			modelAndView.addObject("post", postFromForm);
+			modelAndView.addObject("username", loggedInUser.getUsername());
+			return modelAndView;
+		}
+		
+		postService.update(postFromForm);
+
+		modelAndView = new ModelAndView("redirect:/dashboard");
+		return modelAndView;
+	}
 }
