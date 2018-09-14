@@ -1,5 +1,7 @@
 package com.example.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.example.model.Comment;
 import com.example.model.Post;
 import com.example.model.User;
+import com.example.service.CommentService;
 import com.example.service.PostService;
 import com.example.service.UserService;
 
@@ -25,6 +29,9 @@ public class PostController {
 
 	@Autowired
 	private PostService postService;
+
+	@Autowired
+	private CommentService commentService;
 
 	@RequestMapping(value = "/post/create", method = RequestMethod.GET)
 	public ModelAndView createPostHandler(Model model) {
@@ -81,7 +88,21 @@ public class PostController {
 			modelAndView.addObject("username", loggedInUser.getUsername());
 		}
 
-		modelAndView.addObject("post", postService.getById(postId));
+		Post postInDB = postService.getById(postId);
+
+		if (postInDB == null) {
+			return new ModelAndView("redirect:/login?error=true");
+		}
+
+		List<Comment> commentList = commentService.listByPost(postInDB);
+		
+		for(int i = 0; i < commentList.size(); i ++) {
+			modelAndView.addObject("comment" + commentList.get(i).getCommentId() + "InDB", commentList.get(i));
+		}
+
+		modelAndView.addObject("commentList", commentList);
+		modelAndView.addObject("comment", new Comment());
+		modelAndView.addObject("post", postInDB);
 		return modelAndView;
 	}
 
@@ -154,7 +175,8 @@ public class PostController {
 	}
 
 	@RequestMapping(value = "/post/edit/{postId}", method = RequestMethod.POST)
-	public ModelAndView submitPostEditionHandler(@Valid Post postFromForm, BindingResult bindingResult, @PathVariable int postId, Model model) {
+	public ModelAndView submitPostEditionHandler(@Valid Post postFromForm, BindingResult bindingResult,
+			@PathVariable int postId, Model model) {
 		ModelAndView modelAndView = null;
 
 		// Check if the user is logged in
@@ -177,7 +199,7 @@ public class PostController {
 			modelAndView = new ModelAndView("redirect:/dashboard?error=true");
 			return modelAndView;
 		}
-		
+
 		postFromForm.setUser(loggedInUser);
 		postFromForm.setCreatedDateTime(post.getCreatedDateTime());
 
@@ -187,7 +209,7 @@ public class PostController {
 			modelAndView.addObject("username", loggedInUser.getUsername());
 			return modelAndView;
 		}
-		
+
 		postService.update(postFromForm);
 
 		modelAndView = new ModelAndView("redirect:/dashboard");

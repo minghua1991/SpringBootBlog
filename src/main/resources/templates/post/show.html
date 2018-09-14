@@ -72,6 +72,10 @@
 		            <!-- 
 		            <%@ include file="../comment/create.jsp" %>
 		            <%@ include file="../comment/index.jsp" %> -->
+		            
+		            <div th:replace="comment/create :: commentCreation"></div>
+		            <div th:replace="comment/show :: commentShow"></div>
+		            
 		        </div>
 		        <div class="col-lg-4">
 		            <div class="pull-right">

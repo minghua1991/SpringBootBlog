@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <div th:fragment="commentEdition">
+        <div class="media" data-toggle="modal" th:attr="aria-labelledby='myModalLabel-'+${comment.getCommentId() }">
+            <div class="modal fade" th:attr="id='myModal-'+${comment.getCommentId() }, aria-labelledby='myModalLabel-'+${comment.getCommentId() }" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" th:attr="id='myModalLabel-'+${comment.getCommentId() }">Comment Dashboard</h4>
+                        </div>
+                        <div class="modal-body" th:if="${comment.getUser().getUsername() == username }">
+                            <ul class="nav nav-pills">
+                                <li class="active"><a data-toggle="pill" th:attr="href='#edit-comment-'+${comment.getCommentId() }">Edit</a></li>
+                                <li><a data-toggle="pill" th:attr="href='#delete-comment-'+${comment.getCommentId() }">Delete</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div th:attr="id='edit-comment-'+${comment.getCommentId() }" class="tab-pane fade in active">
+                                    <form method="POST" th:object="${__${'comment' + comment.getCommentId() + 'InDB'}__}" th:action="@{${'/post/show/' + post.getPostId()+'/comment/' + comment.getCommentId() + '/edit'}}" th:attr="modelAttribute='comment'+${comment.getCommentId()}+'InDB'">
+                                        <div class="form-group">
+                                            <br>
+                                            <label>Content:</label>
+                                            <textarea th:field="*{content}" class="form-control" name = "comment_content" style = "height: 250px; resize: vertical;" value=""></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </form>
+                                </div>
+                                <div th:attr="id='delete-comment-'+${comment.getCommentId() }" class="tab-pane fade">
+                                    <form method="POST"  th:action="@{${'/post/show/' + post.getPostId()+'/comment/' + comment.getCommentId() + '/delete'}}">
+                                        <div class="form-group">
+                                            <br>
+                                            <p><strong>Warning!!!</strong> This action will delete the comment.</p>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary" onclick="return confirm('Are you sure?')">Delete</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-body" th:if="${comment.getUser().getUsername() != username }">
+                            <div class="alert alert-danger">
+                                <p><strong>Sorry!</strong> You have no permission to do this.</p>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</html>

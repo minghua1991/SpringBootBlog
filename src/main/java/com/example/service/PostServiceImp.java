@@ -9,17 +9,9 @@ import org.springframework.stereotype.Service;
 import com.example.model.Post;
 import com.example.model.User;
 import com.example.repository.PostRepository;
-import com.example.repository.RoleRepository;
-import com.example.repository.UserRepository;
 
 @Service("postService")
 public class PostServiceImp implements PostService {
-
-	@Autowired
-	private UserRepository userRepository;
-
-	@Autowired
-	private RoleRepository roleRepository;
 
 	@Autowired
 	private PostRepository postRepository;
@@ -58,7 +50,7 @@ public class PostServiceImp implements PostService {
 
 	@Override
 	public boolean isOwner(Post post, User user) {
-		return post.getUser() == user;
+		return post.getUser().getUserId() == user.getUserId();
 	}
 
 }
