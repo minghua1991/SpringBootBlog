@@ -7,10 +7,6 @@ import com.example.model.User;
 import com.example.model.Comment;
 
 public interface CommentService {
-	// List<Comment> listAll();
-
-	// List<Comment> listByUser(User user);
-
 	List<Comment> listByPost(Post post);
 
 	Comment getById(int commentId);
@@ -19,7 +15,7 @@ public interface CommentService {
 
 	void update(Comment comment);
 
-	void delete(int id);
+	void delete(Comment comment);
 
 	boolean isOwner(Comment comment, User user);
 }

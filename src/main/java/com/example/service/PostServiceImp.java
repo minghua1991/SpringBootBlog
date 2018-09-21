@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.model.Comment;
+import com.example.model.Like;
 import com.example.model.Post;
 import com.example.model.User;
 import com.example.repository.CommentRepository;
@@ -41,8 +43,18 @@ public class PostServiceImp implements PostService {
 	}
 
 	@Override
-	public void delete(int id) {
-		postRepository.deleteById(id);
+	public void delete(Post post) {
+		List<Like> likes = likeRepository.findByPost(post);
+		for (Like like : likes) {
+			likeRepository.delete(like);
+		}
+
+		List<Comment> comments = commentRepository.findByPost(post);
+		for (Comment comment : comments) {
+			commentRepository.delete(comment);
+		}
+
+		postRepository.delete(post);
 	}
 
 	@Override

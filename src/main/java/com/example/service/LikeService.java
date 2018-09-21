@@ -7,16 +7,15 @@ import com.example.model.Post;
 import com.example.model.User;
 
 public interface LikeService {
+	Like getByLikeId(int likeId);
 
 	List<Like> listByPost(Post post);
-
-	Like getByLikeId(int likeId);
 
 	List<Like> getByPostAndUser(Post post, User user);
 
 	void save(Like like);
 
-	void deleteByLikeId(int likeId);
+	void delete(Like like);
 
 	void deleteByPost(Post post);
 

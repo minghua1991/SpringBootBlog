@@ -37,8 +37,8 @@ public class LikeServiceImp implements LikeService {
 	}
 
 	@Override
-	public void deleteByLikeId(int likeId) {
-		likeRepository.deleteById(likeId);
+	public void delete(Like like) {
+		likeRepository.delete(like);
 	}
 
 	@Override

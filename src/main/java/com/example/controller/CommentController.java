@@ -121,7 +121,7 @@ public class CommentController {
 			return modelAndView;
 		}
 
-		commentService.delete(commentInDB.getCommentId());
+		commentService.delete(commentInDB);
 
 		modelAndView = new ModelAndView("redirect:/post/show/{postId}");
 		return modelAndView;

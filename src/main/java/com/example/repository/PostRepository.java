@@ -10,11 +10,6 @@ import com.example.model.User;
 
 @Repository("postRepository")
 public interface PostRepository extends JpaRepository<Post, Integer> {
-
-//	 List<Post> findByUserId(String id);
-//
-//	 List<Post> findByUsername(String username);
-	 
 	 Post findByPostId(int postId);
 	 
 	 List<Post> findByUser(User user);

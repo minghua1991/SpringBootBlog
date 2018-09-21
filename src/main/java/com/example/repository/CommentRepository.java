@@ -11,8 +11,7 @@ import com.example.model.Comment;
 
 @Repository("commentRepository")
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
-
-	Comment findByCommentId(int id);
+	Comment findByCommentId(int commentId);
 
 	List<Comment> findByUser(User user);
 

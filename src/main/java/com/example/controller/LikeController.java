@@ -79,7 +79,7 @@ public class LikeController {
 		if (likesOfPostAndUser != null && likesOfPostAndUser.size() != 0) {
 			for (Like like : likesOfPostAndUser) {
 				if (likeService.isOwner(like, postInDB, loggedInUser)) {
-					likeService.deleteByLikeId(like.getLikeId());
+					likeService.delete(like);
 				}
 			}
 		}

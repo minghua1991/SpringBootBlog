@@ -16,7 +16,7 @@ public interface PostService {
 
 	void update(Post post);
 
-	void delete(int id);
+	void delete(Post post);
 
 	boolean isOwner(Post post, User user);
 }

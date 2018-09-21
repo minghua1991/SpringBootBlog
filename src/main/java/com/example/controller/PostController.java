@@ -34,7 +34,7 @@ public class PostController {
 
 	@Autowired
 	private CommentService commentService;
-	
+
 	@Autowired
 	private LikeService likeService;
 
@@ -100,19 +100,19 @@ public class PostController {
 		}
 
 		List<Comment> commentList = commentService.listByPost(postInDB);
-		
-		for(int i = 0; i < commentList.size(); i ++) {
+
+		for (int i = 0; i < commentList.size(); i++) {
 			modelAndView.addObject("comment" + commentList.get(i).getCommentId() + "InDB", commentList.get(i));
 		}
-		
-		//like details
+
+		// like details
 		List<Like> likesOfPost = likeService.listByPost(postInDB);
-		int numberOfLike = likesOfPost == null? 0: likesOfPost.size();
-		
+		int numberOfLike = likesOfPost == null ? 0 : likesOfPost.size();
+
 		boolean isLikedByLoggedUser = false;
 		List<Like> likesOfPostOfLoggedUser = likeService.getByPostAndUser(postInDB, loggedInUser);
-		if(likesOfPostOfLoggedUser != null && likesOfPostOfLoggedUser.size() > 0) {
-			isLikedByLoggedUser=true;
+		if (likesOfPostOfLoggedUser != null && likesOfPostOfLoggedUser.size() > 0) {
+			isLikedByLoggedUser = true;
 		}
 
 		modelAndView.addObject("isLikedByLoggedUser", isLikedByLoggedUser);
@@ -137,19 +137,19 @@ public class PostController {
 		}
 
 		boolean isOwner = false;
-		Post post = postService.getById(postId);
+		Post postInDB = postService.getById(postId);
 
-		if (loggedInUser != null && post != null) {
-			isOwner = postService.isOwner(post, loggedInUser);
+		if (loggedInUser != null && postInDB != null) {
+			isOwner = postService.isOwner(postInDB, loggedInUser);
 		}
 
-		if (loggedInUser == null || post == null || !isOwner) {
+		if (loggedInUser == null || postInDB == null || !isOwner) {
 			modelAndView = new ModelAndView("redirect:/dashboard?error=true");
 			return modelAndView;
 		}
 
 		if (isOwner) {
-			postService.delete(postId);
+			postService.delete(postInDB);
 		}
 
 		modelAndView = new ModelAndView("redirect:/dashboard");
