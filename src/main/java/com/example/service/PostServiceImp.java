@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.example.model.Post;
 import com.example.model.User;
+import com.example.repository.CommentRepository;
+import com.example.repository.LikeRepository;
 import com.example.repository.PostRepository;
 
 @Service("postService")
@@ -15,6 +17,12 @@ public class PostServiceImp implements PostService {
 
 	@Autowired
 	private PostRepository postRepository;
+
+	@Autowired
+	private CommentRepository commentRepository;
+
+	@Autowired
+	private LikeRepository likeRepository;
 
 	@Override
 	public List<Post> listAll() {

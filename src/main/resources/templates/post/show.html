@@ -12,7 +12,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome-animation/0.0.10/font-awesome-animation.css" type="text/css" />
         <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
-         <style>
+        <style>
             body {
             font-family: 'Lato';
             }
@@ -22,81 +22,68 @@
         </style>
     </head>
     <body id="app-layout">
-    	<div th:replace="layout/nav :: navbar"></div>
-	
-		<!-- Page Content -->
-		<div class="container">
-		    <div class="row">
-		        <!-- Post Content Column -->
-		        <div class="col-lg-8">
-		            <!-- Post Subject -->
-		            <h1 th:utext="${post.getSubject()}"></h1>
-		            <!-- Author -->
-		            <p class="lead">
-		                Posted by <span th:utext="${post.getUser().getUsername()}"></span>
-		            </p>
-		            
-					<!-- <c:choose>
-					  <c:when test="${isLikedByLoggedUser}">
-							<form method="POST" action="${pageContext.request.contextPath}/post/${postInDB.getPostId()}/downvote">
-							    <button style="border:1px solid white; background-color: transparent;">
-							        <div class="list-inline text-left">
-							               <i class="fa fa-thumbs-down fa-wrench faa-wrench animated-hover" aria-hidden="true"></i>
-							            <span>Likes |  ${numberOfLike}</span>
-							        </div>
-							    </button>
-							</form>
-					  </c:when>
-					  <c:otherwise>
-				            <form method="POST" action="${pageContext.request.contextPath}/post/${postInDB.getPostId()}/upvote">
-				                <button style="border:1px solid white; background-color: transparent;">
-				                    <div class="list-inline text-left">
-			                            <i class="fa fa-thumbs-up fa-wrench faa-wrench animated-hover" aria-hidden="true"></i>
-				                        <span>Likes |  ${numberOfLike}</span>
-				                    </div>
-				                </button>
-				            </form>
-					  </c:otherwise>
-					</c:choose> -->
-		            <hr>
-		            <!-- Date/Time -->
-		            <p>
-		                <span class="glyphicon glyphicon-time"></span>
-		                Posted on
-		                <span th:utext="${post.getCreatedDateTimeInStringFormate()}"></span>
-		            </p>
-		            <hr>
-		            <!-- Post Content -->
-		            <p class="lead" th:utext="${post.getContent()}"> </p>
-		            <hr>
-		            <!-- 
-		            <%@ include file="../comment/create.jsp" %>
-		            <%@ include file="../comment/index.jsp" %> -->
-		            
-		            <div th:replace="comment/create :: commentCreation"></div>
-		            <div th:replace="comment/show :: commentShow"></div>
-		            
-		        </div>
-		        <div class="col-lg-4">
-		            <div class="pull-right">
-		            
-						<div th:if="${username == null}">
-						   <a class="btn btn-primary" th:href="@{/}">Back</a>
-						</div>
-						<div th:unless="${username == null}">
-						    <a class="btn btn-primary" th:href="@{/dashboard}">Back</a>
-						</div>
-		            </div>
-		        </div>
-		    </div>
-		</div>
-		
-   		<div th:replace="layout/footer :: footer"></div>
-	
+        <div th:replace="layout/nav :: navbar"></div>
+        <!-- Page Content -->
+        <div class="container">
+            <div class="row">
+                <!-- Post Content Column -->
+                <div class="col-lg-8">
+                    <!-- Post Subject -->
+                    <h1 th:utext="${post.getSubject()}"></h1>
+                    <!-- Author -->
+                    <p class="lead">
+                        Posted by <span th:utext="${post.getUser().getUsername()}"></span>
+                    </p>
+                    <div th:if="${isLikedByLoggedUser}">
+                        <form method="POST" th:action="@{${'/post/show/' + post.getPostId()+'/downvote'}}">
+                            <button style="border:1px solid white; background-color: transparent;">
+                                <div class="list-inline text-left">
+                                    <i class="fa fa-thumbs-down fa-wrench faa-wrench animated-hover" aria-hidden="true"></i>
+                                    <span>Likes |  [[${numberOfLike}]]</span>
+                                </div>
+                            </button>
+                        </form>
+                    </div>
+                    <div th:unless="${isLikedByLoggedUser}">
+                        <form method="POST" th:action="@{${'/post/show/' + post.getPostId()+'/upvote'}}">
+                            <button style="border:1px solid white; background-color: transparent;">
+                                <div class="list-inline text-left">
+                                    <i class="fa fa-thumbs-up fa-wrench faa-wrench animated-hover" aria-hidden="true"></i>
+                                    <span>Likes |  [[${numberOfLike}]]</span>
+                                </div>
+                            </button>
+                        </form>
+                    </div>
+                    <hr>
+                    <!-- Date/Time -->
+                    <p>
+                        <span class="glyphicon glyphicon-time"></span>
+                        Posted on
+                        <span th:utext="${post.getCreatedDateTimeInStringFormate()}"></span>
+                    </p>
+                    <hr>
+                    <!-- Post Content -->
+                    <p class="lead" th:utext="${post.getContent()}"> </p>
+                    <hr>
+                    <div th:replace="comment/create :: commentCreation"></div>
+                    <div th:replace="comment/show :: commentShow"></div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="pull-right">
+                        <div th:if="${username == null}">
+                            <a class="btn btn-primary" th:href="@{/}">Back</a>
+                        </div>
+                        <div th:unless="${username == null}">
+                            <a class="btn btn-primary" th:href="@{/dashboard}">Back</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div th:replace="layout/footer :: footer"></div>
         <!-- JavaScripts -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js" integrity="sha384-I6F5OKECLVtK/BL+8iSLDEHowSAfUo76ZL9+kGAgTRdiByINKJaqTPH/QVNS1VDb" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
         <script th:src="@{/js/scroll.js}">"></script>
-        
     </body>
 </html>

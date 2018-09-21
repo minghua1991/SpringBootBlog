@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.model.Comment;
+import com.example.model.Like;
 import com.example.model.Post;
 import com.example.model.User;
 import com.example.service.CommentService;
+import com.example.service.LikeService;
 import com.example.service.PostService;
 import com.example.service.UserService;
 
@@ -32,6 +34,9 @@ public class PostController {
 
 	@Autowired
 	private CommentService commentService;
+	
+	@Autowired
+	private LikeService likeService;
 
 	@RequestMapping(value = "/post/create", method = RequestMethod.GET)
 	public ModelAndView createPostHandler(Model model) {
@@ -99,7 +104,19 @@ public class PostController {
 		for(int i = 0; i < commentList.size(); i ++) {
 			modelAndView.addObject("comment" + commentList.get(i).getCommentId() + "InDB", commentList.get(i));
 		}
+		
+		//like details
+		List<Like> likesOfPost = likeService.listByPost(postInDB);
+		int numberOfLike = likesOfPost == null? 0: likesOfPost.size();
+		
+		boolean isLikedByLoggedUser = false;
+		List<Like> likesOfPostOfLoggedUser = likeService.getByPostAndUser(postInDB, loggedInUser);
+		if(likesOfPostOfLoggedUser != null && likesOfPostOfLoggedUser.size() > 0) {
+			isLikedByLoggedUser=true;
+		}
 
+		modelAndView.addObject("isLikedByLoggedUser", isLikedByLoggedUser);
+		modelAndView.addObject("numberOfLike", numberOfLike);
 		modelAndView.addObject("commentList", commentList);
 		modelAndView.addObject("comment", new Comment());
 		modelAndView.addObject("post", postInDB);

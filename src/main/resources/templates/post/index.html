@@ -54,28 +54,28 @@
                                 <span th:if="${post.getModifiedDateTimeInStringFormate() == null}">[[${post.getCreatedDateTimeInStringFormate()}]]</span>
                                 <span th:if="${post.getModifiedDateTimeInStringFormate() != null}">[[${post.getModifiedDateTimeInStringFormate()}]]</span>
                             </p>
-                            <!-- <c:choose>
-                                <c:when test="${likeDetails.get(post.getPostId())[0] == 1}">
-                                <form method="POST" action="${pageContext.request.contextPath}/post/${post.getPostId()}/downvote">
+                            <!-- IF It is already liked -->
+                            <div th:if="${likeDetails.get(post.getPostId())[0] == 1}">
+                                <form method="POST" th:action="@{${'/post/show/' + post.getPostId()+'/downvote'}}">
                                     <button style="border:1px solid white; background-color: transparent;">
                                         <div class="list-inline text-left">
-                                               <i class="fa fa-thumbs-down fa-wrench faa-wrench animated-hover" aria-hidden="true"></i>
-                                            <span>Likes |  ${likeDetails.get(post.getPostId())[1]}</span>
+                                            <i class="fa fa-thumbs-down fa-wrench faa-wrench animated-hover" aria-hidden="true"></i>
+                                            <span>Likes |  [[${likeDetails.get(post.getPostId())[1]}]]</span>
                                         </div>
                                     </button>
                                 </form>
-                                </c:when>
-                                <c:otherwise>
-                                         <form method="POST" action="${pageContext.request.contextPath}/post/${post.getPostId()}/upvote">
-                                             <button style="border:1px solid white; background-color: transparent;">
-                                                 <div class="list-inline text-left">
-                                                        <i class="fa fa-thumbs-up fa-wrench faa-wrench animated-hover" aria-hidden="true"></i>
-                                                     <span>Likes |  ${likeDetails.get(post.getPostId())[1]}</span>
-                                                 </div>
-                                             </button>
-                                         </form>
-                                </c:otherwise>
-                                </c:choose> -->
+                            </div>
+                            <!-- ELSE -->
+                            <div th:unless="${likeDetails.get(post.getPostId())[0] == 1}">
+                                <form method="POST" th:action="@{${'/post/show/' + post.getPostId()+'/upvote'}}">
+                                    <button style="border:1px solid white; background-color: transparent;">
+                                        <div class="list-inline text-left">
+                                            <i class="fa fa-thumbs-up fa-wrench faa-wrench animated-hover" aria-hidden="true"></i>
+                                            <span>Likes |  [[${likeDetails.get(post.getPostId())[1]}]]</span>
+                                        </div>
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                         <hr>
                     </th:block>
