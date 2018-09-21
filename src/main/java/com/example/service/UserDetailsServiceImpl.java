@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.model.Role;
 import com.example.model.User;
 import com.example.repository.UserRepository;
+
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 	@Autowired

@@ -1,24 +1,17 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
-	<div th:fragment="commentShow">
-		<!-- Comment -->
-	
-		<th:block th:each="comment : ${commentList}">
-			<div class="media" data-toggle="modal" th:attr="data-target='#myModal-'+${comment.getCommentId() }">
-				<div class="media-body">
-					<h4 class="media-heading" th:inline="text"> [[${comment.getUser().getUsername()}]]
-						<small th:text="${comment.getModifiedDateTimeInStringFormate() == null}? ${comment.getCreatedDateTimeInStringFormate()}: ${comment.getModifiedDateTimeInStringFormate()}"></small>
-					</h4>
-					<p th:utext="${comment.getContent()}"></p>
-				</div>
-			</div>
-			
-			
-			<div th:replace="comment/edit :: commentEdition"></div>
-		</th:block>
-	
-	
-	</div>
-
+    <div th:fragment="commentShow">
+        <!-- Comment -->
+        <th:block th:each="comment : ${commentList}">
+            <div class="media" data-toggle="modal" th:attr="data-target='#myModal-'+${comment.getCommentId() }">
+                <div class="media-body">
+                    <h4 class="media-heading" th:inline="text"> [[${comment.getUser().getUsername()}]]
+                        <small th:text="${comment.getModifiedDateTimeInStringFormate() == null}? ${comment.getCreatedDateTimeInStringFormate()}: ${comment.getModifiedDateTimeInStringFormate()}"></small>
+                    </h4>
+                    <p th:utext="${comment.getContent()}"></p>
+                </div>
+            </div>
+            <div th:replace="comment/edit :: commentEdition"></div>
+        </th:block>
+    </div>
 </html>

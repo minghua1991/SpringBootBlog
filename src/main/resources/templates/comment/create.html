@@ -1,21 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
-<!-- Post Comments -->
-<!-- Comments Form -->
-<div class="well" th:fragment="commentCreation">
-    <h4>Leave a Comment:</h4>
-
-    <form th:action="@{${'/post/show/' + post.getPostId() + '/comment/create'}}" th:object="${comment}" method="POST">
-        <div class="form-group" th:classappend="${#fields.hasErrors('content')} ? has-error">
-            <textarea th:field="*{content}" type="text" class="form-control" name="content" rows="3" style = "resize: vertical"></textarea>
-             <span class="help-block"> <strong th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></strong></span>
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-
-</div>
-<hr>
-
+    <!-- Post Comments -->
+    <!-- Comments Form -->
+    <div class="well" th:fragment="commentCreation">
+        <h4>Leave a Comment:</h4>
+        <form th:action="@{${'/post/show/' + post.getPostId() + '/comment/create'}}" th:object="${comment}" method="POST">
+            <div class="form-group" th:classappend="${#fields.hasErrors('content')} ? has-error">
+                <textarea th:field="*{content}" type="text" class="form-control" name="content" rows="3" style = "resize: vertical"></textarea>
+                <span class="help-block"> <strong th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></strong></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+    <hr>
 </html>
-
