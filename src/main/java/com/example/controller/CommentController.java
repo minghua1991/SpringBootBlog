@@ -33,7 +33,7 @@ public class CommentController {
 
 	@RequestMapping(value = "/post/show/{postId}/comment/create", method = RequestMethod.POST)
 	public ModelAndView commentCreationHandler(@Valid Comment comment, BindingResult bindingResult,
-			@PathVariable int postId, Model model) {
+			@PathVariable int postId) {
 		ModelAndView modelAndView = null;
 
 		// Check if the user is logged in
@@ -67,7 +67,7 @@ public class CommentController {
 
 	@RequestMapping(value = "/post/show/{postId}/comment/{commentId}/edit", method = RequestMethod.POST)
 	public ModelAndView commentEditionHandler(@Valid Comment comment, BindingResult bindingResult,
-			@PathVariable int commentId, Model model) {
+			@PathVariable int commentId) {
 		ModelAndView modelAndView = null;
 
 		// Check if the user is logged in
@@ -101,7 +101,7 @@ public class CommentController {
 	}
 
 	@RequestMapping(value = "/post/show/{postId}/comment/{commentId}/delete", method = RequestMethod.POST)
-	public ModelAndView commentDeletionHandler(@PathVariable int commentId, Model model) {
+	public ModelAndView commentDeletionHandler(@PathVariable int commentId) {
 		ModelAndView modelAndView = null;
 
 		// Check if the user is logged in

@@ -25,7 +25,7 @@ public class AuthController {
 	private PostService postService;
 
 	@RequestMapping(value = { "/login" }, method = RequestMethod.GET)
-	public ModelAndView login(Model model) {
+	public ModelAndView login() {
 		ModelAndView modelAndView = null;
 
 		// Check if the user is logged in
@@ -104,7 +104,6 @@ public class AuthController {
 			modelAndView.addObject("username", loggedInUser.getUsername());
 
 			modelAndView.addObject("posts", postService.listByUser(loggedInUser));
-			// System.out.println(postService.listByUser(loggedInUser).get(0).getSubject());
 		}
 		return modelAndView;
 	}

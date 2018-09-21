@@ -30,13 +30,10 @@ public class LikeController {
 	private PostService postService;
 
 	@Autowired
-	private CommentService commentService;
-
-	@Autowired
 	private LikeService likeService;
 
 	@RequestMapping(value = "post/show/{postId}/upvote", method = POST)
-	public ModelAndView upvote(Model model, @PathVariable int postId) {
+	public ModelAndView upvote(@PathVariable int postId) {
 		ModelAndView modelAndView = null;
 
 		// Check if the user is logged in
@@ -62,7 +59,7 @@ public class LikeController {
 	}
 
 	@RequestMapping(value = "post/show/{postId}/downvote", method = POST)
-	public ModelAndView downvote(Model model, @PathVariable int postId) {
+	public ModelAndView downvote(@PathVariable int postId) {
 		ModelAndView modelAndView = null;
 
 		// Check if the user is logged in

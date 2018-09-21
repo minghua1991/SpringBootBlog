@@ -1,5 +1,7 @@
 package com.example.controller;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -7,7 +9,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,7 +40,7 @@ public class PostController {
 	private LikeService likeService;
 
 	@RequestMapping(value = "/post/create", method = RequestMethod.GET)
-	public ModelAndView createPostHandler(Model model) {
+	public ModelAndView createPostHandler() {
 		ModelAndView modelAndView = null;
 
 		// Check if the user is logged in
@@ -83,7 +84,7 @@ public class PostController {
 	}
 
 	@RequestMapping(value = "/post/show/{postId}", method = RequestMethod.GET)
-	public ModelAndView handlePostShowHandler(@PathVariable int postId, Model model) {
+	public ModelAndView handlePostShowHandler(@PathVariable int postId) {
 		ModelAndView modelAndView = new ModelAndView("post/show");
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -100,6 +101,13 @@ public class PostController {
 		}
 
 		List<Comment> commentList = commentService.listByPost(postInDB);
+
+		Collections.sort(commentList, new Comparator<Comment>() {
+			@Override
+			public int compare(Comment c1, Comment c2) {
+				return c2.getCommentId() - c1.getCommentId();
+			}
+		});
 
 		for (int i = 0; i < commentList.size(); i++) {
 			modelAndView.addObject("comment" + commentList.get(i).getCommentId() + "InDB", commentList.get(i));
@@ -124,7 +132,7 @@ public class PostController {
 	}
 
 	@RequestMapping(value = "/post/delete/{postId}", method = RequestMethod.GET)
-	public ModelAndView handlePostDeletionHandler(@PathVariable int postId, Model model) {
+	public ModelAndView handlePostDeletionHandler(@PathVariable int postId) {
 		ModelAndView modelAndView = null;
 
 		// Check if the user is logged in
@@ -157,7 +165,7 @@ public class PostController {
 	}
 
 	@RequestMapping(value = "/post/edit/{postId}", method = RequestMethod.GET)
-	public ModelAndView handlePostEditionHandler(@PathVariable int postId, Model model) {
+	public ModelAndView handlePostEditionHandler(@PathVariable int postId) {
 		ModelAndView modelAndView = null;
 
 		// Check if the user is logged in
@@ -184,7 +192,6 @@ public class PostController {
 		if (isOwner) {
 			modelAndView = new ModelAndView("post/edit");
 			modelAndView.addObject("post", post);
-			System.out.println("test user " + post.getUser());
 			modelAndView.addObject("username", loggedInUser.getUsername());
 		}
 
@@ -193,7 +200,7 @@ public class PostController {
 
 	@RequestMapping(value = "/post/edit/{postId}", method = RequestMethod.POST)
 	public ModelAndView submitPostEditionHandler(@Valid Post postFromForm, BindingResult bindingResult,
-			@PathVariable int postId, Model model) {
+			@PathVariable int postId) {
 		ModelAndView modelAndView = null;
 
 		// Check if the user is logged in
