@@ -46,8 +46,7 @@ public class CommentController {
 		}
 
 		if (bindingResult.hasErrors()) {
-			// this one needs updating
-			modelAndView = new ModelAndView("redirect:/post/show/{postId}");
+			modelAndView = new ModelAndView("redirect:/post/show/{postId}?error=true");
 			return modelAndView;
 		}
 

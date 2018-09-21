@@ -5,10 +5,13 @@
     <div class="well" th:fragment="commentCreation">
         <h4>Leave a Comment:</h4>
         <form th:action="@{${'/post/show/' + post.getPostId() + '/comment/create'}}" th:object="${comment}" method="POST">
-            <div class="form-group" th:classappend="${#fields.hasErrors('content')} ? has-error">
+            <div class="form-group" th:classappend="${param.error} ? has-error">
                 <textarea th:field="*{content}" type="text" class="form-control" name="content" rows="3" style = "resize: vertical"></textarea>
                 <span class="help-block"> <strong th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></strong></span>
             </div>
+             <div class="alert alert-danger text-center" th:if="${param.error}">
+                  <strong>Oops! Something went wrong</strong>
+             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>
